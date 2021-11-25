@@ -15,6 +15,7 @@
 package webui
 
 import (
+	"context"
 	"crypto/rand"
 	"encoding/base64"
 	"fmt"
@@ -23,6 +24,24 @@ import (
 
 	"go.thethings.network/lorawan-stack/v3/pkg/experimental"
 )
+
+type cspNonceKeyType struct{}
+
+var cspNonceKey cspNonceKeyType
+
+// WithCSPNonce returns a context with the CSP nonce used for CSP header.
+func WithCSPNonce(ctx context.Context, nonce string) context.Context {
+	return context.WithValue(ctx, cspNonceKey, nonce)
+}
+
+// CSPNonceFromContext returns the CSP nonce from context.
+func CSPNonceFromContext(ctx context.Context) string {
+	cspNonce, ok := ctx.Value(cspNonceKey).(string)
+	if !ok {
+		panic("no csp nonce found in context")
+	}
+	return cspNonce
+}
 
 // CSPFeatureFlag is the feature flag that enables the Content-Security-Policy header.
 var CSPFeatureFlag = experimental.DefineFeature("webui.csp", false)

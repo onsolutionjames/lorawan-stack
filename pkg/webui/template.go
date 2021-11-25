@@ -16,6 +16,7 @@ package webui
 
 import (
 	"bytes"
+	"context"
 	"html/template"
 	"io"
 	"net/http"
@@ -25,6 +26,41 @@ import (
 	echo "github.com/labstack/echo/v4"
 	"go.thethings.network/lorawan-stack/v3/pkg/experimental"
 )
+
+type (
+	templateDataKeyType struct{}
+	appConfigKeyType    struct{}
+)
+
+var (
+	templateDataKey templateDataKeyType
+	appDataKey      appConfigKeyType
+)
+
+// WithTemplateData stores the template data into context.
+func WithTemplateData(ctx context.Context, td TemplateData) context.Context {
+	return context.WithValue(ctx, templateDataKey, td)
+}
+
+// TemplateDataFromContext returns the template data from context.
+func TemplateDataFromContext(ctx context.Context) TemplateData {
+	td, ok := ctx.Value(templateDataKey).(TemplateData)
+	if !ok {
+		panic("no template data found in context")
+	}
+	return td
+}
+
+// WithAppConfig stores the app config into context.
+func WithAppConfig(ctx context.Context, appConfig interface{}) context.Context {
+	return context.WithValue(ctx, appDataKey, appConfig)
+}
+
+// AppConfigFromContext returns the app config from context.
+func AppConfigFromContext(ctx context.Context) interface{} {
+	appConfig := ctx.Value(appDataKey)
+	return appConfig
+}
 
 // Data contains data to render templates.
 type Data struct {

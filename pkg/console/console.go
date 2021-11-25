@@ -17,14 +17,16 @@ package console
 import (
 	"context"
 	"fmt"
+	"net/http"
 	"net/url"
 
-	echo "github.com/labstack/echo/v4"
+	"github.com/gorilla/csrf"
+	"github.com/gorilla/mux"
 	"go.thethings.network/lorawan-stack/v3/pkg/component"
 	web_errors "go.thethings.network/lorawan-stack/v3/pkg/errors/web"
 	"go.thethings.network/lorawan-stack/v3/pkg/web"
-	"go.thethings.network/lorawan-stack/v3/pkg/web/middleware"
 	"go.thethings.network/lorawan-stack/v3/pkg/web/oauthclient"
+	"go.thethings.network/lorawan-stack/v3/pkg/webmiddleware"
 	"go.thethings.network/lorawan-stack/v3/pkg/webui"
 )
 
@@ -126,41 +128,61 @@ func generateConsoleCSPString(config *Config, nonce string) string {
 	return webui.GenerateCSPString(cspMap)
 }
 
+func cspHeader(console *Console) webmiddleware.MiddlewareFunc {
+	return func(next http.Handler) http.Handler {
+		return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+			ctx := r.Context()
+			if webui.CSPFeatureFlag.GetValue(ctx) {
+				nonce := webui.GenerateNonce()
+				ctx = webui.WithCSPNonce(ctx, nonce)
+				cspString := generateConsoleCSPString(console.configFromContext(ctx), nonce)
+				w.Header().Set("Content-Security-Policy", cspString)
+			}
+			next.ServeHTTP(w, r)
+		})
+	}
+}
+
+func templateMiddleware(console *Console) webmiddleware.MiddlewareFunc {
+	return func(next http.Handler) http.Handler {
+		return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+			ctx := r.Context()
+			config := console.configFromContext(ctx)
+			ctx = webui.WithTemplateData(ctx, config.UI.TemplateData)
+			frontendConfig := config.UI.FrontendConfig
+			frontendConfig.Language = config.UI.TemplateData.Language
+			ctx = webui.WithAppConfig(ctx, struct {
+				FrontendConfig
+			}{
+				FrontendConfig: frontendConfig,
+			})
+			next.ServeHTTP(w, r)
+		})
+	}
+}
+
 // RegisterRoutes implements web.Registerer. It registers the Console to the web server.
 func (console *Console) RegisterRoutes(server *web.Server) {
+	consoleRouter := server.Router().NewRoute().Subrouter()
+	consoleRouter.Use(
+		mux.MiddlewareFunc(cspHeader(console)),
+		mux.MiddlewareFunc(templateMiddleware(console)),
+		mux.MiddlewareFunc(
+			webmiddleware.CSRF(
+				console.GetBaseConfig(console.Context()).HTTP.Cookie.HashKey,
+				csrf.CookieName("_console_csrf"),
+				csrf.FieldName("_console_csrf"),
+				csrf.Path(console.config.Mount),
+			),
+		),
+	)
 	group := server.Group(
 		console.config.Mount,
-		func(next echo.HandlerFunc) echo.HandlerFunc {
-			return func(c echo.Context) error {
-				if webui.CSPFeatureFlag.GetValue(c.Request().Context()) {
-					nonce := webui.GenerateNonce()
-					c.Set("csp_nonce", nonce)
-					cspString := generateConsoleCSPString(console.configFromContext(c.Request().Context()), nonce)
-					c.Response().Header().Set("Content-Security-Policy", cspString)
-				}
-				return next(c)
-			}
-		},
-		func(next echo.HandlerFunc) echo.HandlerFunc {
-			return func(c echo.Context) error {
-				config := console.configFromContext(c.Request().Context())
-				c.Set("template_data", config.UI.TemplateData)
-				frontendConfig := config.UI.FrontendConfig
-				frontendConfig.Language = config.UI.TemplateData.Language
-				c.Set("app_config", struct {
-					FrontendConfig
-				}{
-					FrontendConfig: frontendConfig,
-				})
-				return next(c)
-			}
-		},
 		web_errors.ErrorMiddleware(map[string]web_errors.ErrorRenderer{
 			"text/html": webui.Template,
 		}),
-		middleware.CSRF("_console_csrf", console.config.Mount, console.GetBaseConfig(console.Context()).HTTP.Cookie.HashKey),
 	)
-
+	server.Router().PathPrefix(console.config.Mount).Handler(consoleRouter)
 	api := group.Group("/api/auth")
 	api.GET("/token", console.oc.HandleToken)
 	api.POST("/logout", console.oc.HandleLogout)
