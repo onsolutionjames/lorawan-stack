@@ -128,6 +128,11 @@ func (h *ProxyHeaders) intercept(ctx context.Context) metadata.MD {
 		for _, header := range proxyHeaders {
 			delete(md, header)
 		}
+	}
+	if v := md.Get(headerXRealIP); len(v) == 0 {
+		// Either we don't trust the proxy or the trusted proxy didn't set `x-real-ip`.
+		// The latter is possible when the stack is deployed without a proxy and the caller has a trusted IP (ex: localhost/docker testing).
+		// This header is required for rate-limiting and should be mandatorily set at this point. So we set this ourselves.
 		md.Set(headerXRealIP, remoteIP)
 	}
 	return md
