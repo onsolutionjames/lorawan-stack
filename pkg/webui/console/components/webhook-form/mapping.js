@@ -27,10 +27,39 @@ const mapWebhookHeadersTypeToFormValue = headersType =>
     )) ||
   []
 
+const encodeWebhookBasicAuth = basic_auth => {
+  if (basic_auth.value) {
+    const newHeader = {
+      key: 'Authorization',
+      value: `Basic ${btoa(`${basic_auth?.username}:${basic_auth?.password}`)}`,
+    }
+
+    return newHeader
+  }
+
+  return {}
+}
+
+const decodeWebhookBasicAuth = headers => {
+  if (headers.Authorization) {
+    const encodedCredentials = headers.Authorization.split('Basic')[1]
+    const decodedUsername = atob(encodedCredentials).split(':')[0]
+    const decodedPassword = atob(encodedCredentials).split(':')[1]
+    const decodedBasicAuth = {
+      value: headers.Authorization.startsWith('Basic '),
+      username: decodedUsername,
+      password: decodedPassword,
+    }
+
+    return decodedBasicAuth
+  }
+}
+
 export const mapWebhookToFormValues = webhook => ({
   webhook_id: webhook.ids.webhook_id,
   base_url: webhook.base_url,
   format: webhook.format,
+  basic_auth: decodeWebhookBasicAuth(webhook.headers),
   headers: mapWebhookHeadersTypeToFormValue(webhook.headers),
   downlink_api_key: webhook.downlink_api_key,
   uplink_message: mapWebhookMessageTypeToFormValue(webhook.uplink_message),
@@ -68,7 +97,11 @@ export const mapFormValuesToWebhook = (values, appId) => ({
   },
   base_url: values.base_url,
   format: values.format,
-  headers: mapHeadersTypeFormValueToWebhookHeadersType(values.headers),
+  basic_auth: values.basic_auth,
+  headers: mapHeadersTypeFormValueToWebhookHeadersType([
+    ...values.headers,
+    encodeWebhookBasicAuth(values.basic_auth),
+  ]),
   downlink_api_key: values.downlink_api_key,
   uplink_message: mapMessageTypeFormValueToWebhookMessageType(values.uplink_message),
   join_accept: mapMessageTypeFormValueToWebhookMessageType(values.join_accept),
@@ -88,6 +121,11 @@ export const blankValues = {
   webhook_id: undefined,
   base_url: undefined,
   format: undefined,
+  basic_auth: {
+    value: false,
+    username: '',
+    password: '',
+  },
   downlink_api_key: '',
   uplink_message: { enabled: false, value: '' },
   join_accept: { enabled: false, value: '' },
