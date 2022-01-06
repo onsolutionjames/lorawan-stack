@@ -70,6 +70,8 @@ const m = defineMessages({
   messagePathValidateTooLong: 'Enabled message path must be at most 64 characters',
   basicAuthCheckbox: 'Use basic access authentication (basic auth)',
   requestBasicAuth: 'Request authentication',
+  hasAuthorization:
+    'This webhook already has a header with the same key. Adding another will overwrite the one that is already there',
 })
 
 const headerCheck = headers =>
@@ -93,8 +95,8 @@ const validationSchema = Yup.object().shape({
   format: Yup.string().required(sharedMessages.validateRequired),
   basic_auth: Yup.object().shape({
     value: Yup.boolean(),
-    username: Yup.string().default('').required(sharedMessages.validateRequired),
-    password: Yup.string().default('').required(sharedMessages.validateRequired),
+    username: Yup.string().default(''),
+    password: Yup.string().default(''),
   }),
   headers: Yup.array()
     .of(
@@ -230,16 +232,20 @@ export default class WebhookForm extends Component {
       displayOverwriteModal: false,
       existingId: undefined,
       mayShowCredentialsInput: initialWebhookValue.headers.Authorization?.startsWith('Basic'),
-      hasAuthorization: Boolean(initialWebhookValue.headers.Authorization),
+      hasAuthorization: false,
     }
   }
 
   @bind
   async handleSubmit(values, { resetForm }) {
     const { appId, onSubmit, onSubmitSuccess, onSubmitFailure, existCheck, update } = this.props
-    console.log(values)
+    // Ensure that the basic auth header is deleted properly.
+    if (values.basic_auth && values.basic_auth.value === false) {
+      values.headers = values.headers.filter(
+        header => header.key !== 'Authorizarion' && !header.value.startsWith('Basic'),
+      )
+    }
     const webhook = mapFormValuesToWebhook(values, appId)
-
     await this.setState({ error: '' })
 
     try {
@@ -260,7 +266,6 @@ export default class WebhookForm extends Component {
       await onSubmitSuccess(result)
     } catch (error) {
       resetForm({ values })
-
       await this.setState({ error })
       await onSubmitFailure(error)
     }
@@ -306,13 +311,24 @@ export default class WebhookForm extends Component {
 
   @bind
   handleRequestAuthenticationChange(event) {
+    const { initialWebhookValue } = this.props
     this.setState({ mayShowCredentialsInput: event.target.checked })
+
+    if (event.target.checked) {
+      this.setState({ hasAuthorization: Boolean(initialWebhookValue.headers.Authorization) })
+    }
+  }
+
+  @bind
+  handleHeadersChange(event) {
+    // Check if the headers have repeated keys.
+    const headerKeys = event.map(header => header.key)
+    this.setState({ hasAuthorization: event.length !== new Set(headerKeys).size })
   }
 
   render() {
     const { update, initialWebhookValue, webhookTemplate, buttonStyle } = this.props
     const { error, displayOverwriteModal, existingId } = this.state
-    console.log(initialWebhookValue)
     let initialValues = blankValues
     if (update && initialWebhookValue) {
       initialValues = mapWebhookToFormValues(initialWebhookValue)
@@ -400,11 +416,7 @@ export default class WebhookForm extends Component {
             tooltipId={tooltipIds.BASIC_AUTH}
           />
           {this.state.hasAuthorization && (
-            <Notification
-              content='There is already an "Authorization" header attached to the webhook requests'
-              small
-              warning
-            />
+            <Notification content={m.hasAuthorization} small warning />
           )}
           {this.state.mayShowCredentialsInput && (
             <Form.FieldContainer horizontal>
@@ -429,6 +441,7 @@ export default class WebhookForm extends Component {
             keyPlaceholder={m.headersKeyPlaceholder}
             valuePlaceholder={m.headersValuePlaceholder}
             addMessage={m.headersAdd}
+            onChange={this.handleHeadersChange}
             component={KeyValueMap}
           />
           <Form.SubTitle title={m.enabledMessages} />

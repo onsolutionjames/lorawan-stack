@@ -28,10 +28,10 @@ const mapWebhookHeadersTypeToFormValue = headersType =>
   []
 
 const encodeWebhookBasicAuth = basic_auth => {
-  if (basic_auth.value) {
+  if (basic_auth && basic_auth.value === true) {
     const newHeader = {
       key: 'Authorization',
-      value: `Basic ${btoa(`${basic_auth?.username}:${basic_auth?.password}`)}`,
+      value: `Basic ${btoa(`${basic_auth.username}:${basic_auth.password}`)}`,
     }
 
     return newHeader
@@ -41,7 +41,7 @@ const encodeWebhookBasicAuth = basic_auth => {
 }
 
 const decodeWebhookBasicAuth = headers => {
-  if (headers.Authorization) {
+  if (headers.Authorization && headers.Authorization.startsWith('Basic')) {
     const encodedCredentials = headers.Authorization.split('Basic')[1]
     const decodedUsername = atob(encodedCredentials).split(':')[0]
     const decodedPassword = atob(encodedCredentials).split(':')[1]
@@ -98,10 +98,12 @@ export const mapFormValuesToWebhook = (values, appId) => ({
   base_url: values.base_url,
   format: values.format,
   basic_auth: values.basic_auth,
-  headers: mapHeadersTypeFormValueToWebhookHeadersType([
-    ...values.headers,
-    encodeWebhookBasicAuth(values.basic_auth),
-  ]),
+  headers: values.basic_auth
+    ? mapHeadersTypeFormValueToWebhookHeadersType([
+        ...values.headers,
+        encodeWebhookBasicAuth(values.basic_auth),
+      ])
+    : mapHeadersTypeFormValueToWebhookHeadersType(values.headers),
   downlink_api_key: values.downlink_api_key,
   uplink_message: mapMessageTypeFormValueToWebhookMessageType(values.uplink_message),
   join_accept: mapMessageTypeFormValueToWebhookMessageType(values.join_accept),
