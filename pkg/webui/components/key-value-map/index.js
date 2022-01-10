@@ -65,7 +65,6 @@ class KeyValueMap extends React.PureComponent {
   @bind
   handleEntryChange(index, newValues) {
     const { onChange, value, indexAsKey } = this.props
-    console.log(value)
     onChange(
       value.map((val, idx) => {
         if (index !== idx) {

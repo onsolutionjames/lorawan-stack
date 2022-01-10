@@ -406,6 +406,9 @@ export default class WebhookForm extends Component {
             sensitive
             code
           />
+          {this.state.hasAuthorization && (
+            <Notification content={m.hasAuthorization} small warning />
+          )}
           <Form.Field
             autoFocus
             title={m.requestBasicAuth}
@@ -415,9 +418,6 @@ export default class WebhookForm extends Component {
             component={Checkbox}
             tooltipId={tooltipIds.BASIC_AUTH}
           />
-          {this.state.hasAuthorization && (
-            <Notification content={m.hasAuthorization} small warning />
-          )}
           {this.state.mayShowCredentialsInput && (
             <Form.FieldContainer horizontal>
               <Form.Field
