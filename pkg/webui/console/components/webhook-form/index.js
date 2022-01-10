@@ -231,7 +231,11 @@ export default class WebhookForm extends Component {
       error: undefined,
       displayOverwriteModal: false,
       existingId: undefined,
-      mayShowCredentialsInput: initialWebhookValue.headers.Authorization?.startsWith('Basic'),
+      mayShowCredentialsInput:
+        initialWebhookValue &&
+        initialWebhookValue.headers &&
+        initialWebhookValue.headers.Authorization &&
+        initialWebhookValue.headers.Authorization.startsWith('Basic'),
       hasAuthorization: false,
     }
   }

@@ -39,7 +39,7 @@ const encodeWebhookBasicAuth = basic_auth => {
 }
 
 const decodeWebhookBasicAuth = headers => {
-  if (headers.Authorization && headers.Authorization.startsWith('Basic')) {
+  if (headers?.Authorization && headers.Authorization.startsWith('Basic')) {
     const encodedCredentials = headers.Authorization.split('Basic')[1]
     const decodedUsername = atob(encodedCredentials).split(':')[0]
     const decodedPassword = atob(encodedCredentials).split(':')[1]
@@ -127,7 +127,7 @@ export const blankValues = {
   base_url: undefined,
   format: undefined,
   basic_auth: {
-    value: false,
+    value: undefined,
     username: '',
     password: '',
   },
