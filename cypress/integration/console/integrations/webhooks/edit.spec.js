@@ -30,6 +30,10 @@ describe('Application Webhook', () => {
   const webhookBody = {
     webhook: {
       base_url: 'https://example.com/edit-webhooks-test',
+      basic_auth: {
+        password: '',
+        username: '',
+      },
       format: 'json',
       ids: {
         application_ids: {},
