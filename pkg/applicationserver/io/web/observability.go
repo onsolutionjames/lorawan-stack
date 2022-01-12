@@ -28,6 +28,7 @@ var evtWebhookFail = events.Define(
 	"as.webhook.fail", "fail to send webhook",
 	events.WithVisibility(ttnpb.RIGHT_APPLICATION_TRAFFIC_READ),
 	events.WithErrorDataType(),
+	events.WithPropagateToParent(),
 )
 
 const (

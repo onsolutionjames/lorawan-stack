@@ -13,6 +13,8 @@ For details about compatibility between different releases, see the **Commitment
 
 ### Changed
 
+- Limited the end device event types that are included in application event streams to only application layer events, errors and warnings.
+
 ### Deprecated
 
 ### Removed
