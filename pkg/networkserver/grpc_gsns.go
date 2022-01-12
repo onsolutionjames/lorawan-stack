@@ -848,7 +848,6 @@ func (ns *NetworkServer) handleDataUplink(ctx context.Context, up *ttnpb.UplinkM
 		return err
 	}
 	if !ok {
-		queuedEvents = append(queuedEvents, evtDropDataUplink.NewWithIdentifiersAndData(ctx, matched.Device.Ids, errDuplicate))
 		registerReceiveDuplicateUplink(ctx, up)
 		return nil
 	}
@@ -1117,7 +1116,6 @@ func (ns *NetworkServer) handleJoinRequest(ctx context.Context, up *ttnpb.Uplink
 		return err
 	}
 	if !ok {
-		queuedEvents = append(queuedEvents, evtDropJoinRequest.NewWithIdentifiersAndData(ctx, matched.Ids, errDuplicate))
 		registerReceiveDuplicateUplink(ctx, up)
 		return nil
 	}
