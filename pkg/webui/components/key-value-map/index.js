@@ -35,7 +35,7 @@ class KeyValueMap extends React.PureComponent {
     className: PropTypes.string,
     disabled: PropTypes.bool,
     indexAsKey: PropTypes.bool,
-    isReadOnly: PropTypes.bool,
+    isReadOnly: PropTypes.func,
     keyPlaceholder: PropTypes.message,
     name: PropTypes.string.isRequired,
     onBlur: PropTypes.func,
@@ -61,7 +61,7 @@ class KeyValueMap extends React.PureComponent {
     indexAsKey: false,
     keyPlaceholder: '',
     disabled: false,
-    isReadOnly: false,
+    isReadOnly: () => null,
   }
 
   @bind
