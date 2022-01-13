@@ -175,8 +175,8 @@ let currentHeaders
 const mapBasicAuthHeaderToBoolean = value => {
   currentHeaders = value
   const useBasicAuth =
-    value.some(header => header.key === 'Authorization') &&
-    value.some(header => header.value.startsWith('Basic'))
+    value?.some(header => header.key === 'Authorization') &&
+    value?.some(header => header.value.startsWith('Basic'))
   return useBasicAuth
 }
 
