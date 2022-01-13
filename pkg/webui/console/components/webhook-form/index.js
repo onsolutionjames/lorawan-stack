@@ -70,8 +70,6 @@ const m = defineMessages({
   messagePathValidateTooLong: 'Enabled message path must be at most 64 characters',
   basicAuthCheckbox: 'Use basic access authentication (basic auth)',
   requestBasicAuth: 'Request authentication',
-  hasAuthorization:
-    'This webhook already has a header with the same key. Adding another will overwrite the one that is already there',
 })
 
 const headerCheck = headers =>
@@ -93,11 +91,6 @@ const validationSchema = Yup.object().shape({
     .matches(webhookIdRegexp, Yup.passValues(sharedMessages.validateIdFormat))
     .required(sharedMessages.validateRequired),
   format: Yup.string().required(sharedMessages.validateRequired),
-  basic_auth: Yup.object().shape({
-    value: Yup.boolean(),
-    username: Yup.string().default(''),
-    password: Yup.string().default(''),
-  }),
   headers: Yup.array()
     .of(
       Yup.object({
@@ -176,13 +169,102 @@ const validationSchema = Yup.object().shape({
     .test('has path length at most 64 characters', m.messagePathValidateTooLong, messageCheck),
 })
 
+// Encode and decode basic auth header.
+let currentHeaders
+
+const mapBasicAuthHeaderToBoolean = value => {
+  currentHeaders = value
+  const useBasicAuth =
+    value.some(header => header.key === 'Authorization') &&
+    value.some(header => header.value.startsWith('Basic'))
+  return useBasicAuth
+}
+
+const mapBooleanToBasicAuthHeader = value => {
+  if (value) {
+    return [...currentHeaders, ...{ key: 'Authorization', value: 'Basic' }]
+  }
+  return currentHeaders.filter(
+    header => header.key !== 'Authorizarion' && !header.value.startsWith('Basic'),
+  )
+}
+
+const mapBasicAuthHeaderToUsername = value => {
+  const basicAuth = value.filter(
+    header => header.key === 'Authorization' && header.value.startsWith('Basic'),
+  )
+  const encodedCredentials = basicAuth[0]?.value.split('Basic')[1]
+  if (encodedCredentials) {
+    const decodedCredentials = atob(encodedCredentials)
+    const decodedUsername = decodedCredentials.slice(0, decodedCredentials.indexOf(':'))
+    return decodedUsername
+  }
+
+  return ''
+}
+
+const mapCredentialsToAuthHeader = (forUsername, fieldValue) => {
+  const updatedHeaders = currentHeaders?.map(({ key, value }) => {
+    if (key === 'Authorization' && value.startsWith('Basic')) {
+      const encodedCredentials = value.split('Basic')[1]
+
+      if (encodedCredentials) {
+        const decodedCredentials = atob(encodedCredentials)
+        const username = decodedCredentials.slice(0, decodedCredentials.indexOf(':'))
+        const password = decodedCredentials.slice(
+          decodedCredentials.indexOf(':') + 1,
+          decodedCredentials.length,
+        )
+        if (forUsername) {
+          return {
+            key: 'Authorization',
+            value: `Basic ${btoa(`${fieldValue}:${password}`)}`,
+          }
+        }
+        return {
+          key: 'Authorization',
+          value: `Basic ${btoa(`${username}:${fieldValue}`)}`,
+        }
+      }
+      if (forUsername) {
+        return { key: 'Authorization', value: `Basic ${btoa(`${fieldValue}:`)}` }
+      }
+
+      return { key: 'Authorization', value: `Basic ${btoa(`:${fieldValue}`)}` }
+    }
+
+    return { key, value }
+  })
+
+  currentHeaders = updatedHeaders
+  return currentHeaders
+}
+
+const mapBasicAuthHeaderToPassword = value => {
+  const basicAuth = value.filter(
+    header => header.key === 'Authorization' && header.value.startsWith('Basic'),
+  )
+  const encodedCredentials = basicAuth[0]?.value.split('Basic')[1]
+  if (encodedCredentials) {
+    const decodedCredentials = atob(encodedCredentials)
+    const decodedPassword = decodedCredentials.slice(
+      decodedCredentials.indexOf(':') + 1,
+      decodedCredentials.length,
+    )
+    return decodedPassword
+  }
+
+  return ''
+}
+
+const makeBasicAuthDecoder = forPassword => value => mapCredentialsToAuthHeader(forPassword, value)
+
 export default class WebhookForm extends Component {
   static propTypes = {
     appId: PropTypes.string,
     buttonStyle: PropTypes.shape({ activateWebhookButton: PropTypes.shape({}) }),
     existCheck: PropTypes.func,
     initialWebhookValue: PropTypes.shape({
-      basic_auth: PropTypes.bool,
       ids: PropTypes.shape({
         webhook_id: PropTypes.string,
       }),
@@ -231,24 +313,17 @@ export default class WebhookForm extends Component {
       error: undefined,
       displayOverwriteModal: false,
       existingId: undefined,
-      mayShowCredentialsInput:
+      shouldShowCredentialsInput:
         initialWebhookValue &&
         initialWebhookValue.headers &&
         initialWebhookValue.headers.Authorization &&
         initialWebhookValue.headers.Authorization.startsWith('Basic'),
-      hasAuthorization: false,
     }
   }
 
   @bind
   async handleSubmit(values, { resetForm }) {
     const { appId, onSubmit, onSubmitSuccess, onSubmitFailure, existCheck, update } = this.props
-    // Ensure that the basic auth header is deleted properly.
-    if (values.basic_auth && values.basic_auth.value === false) {
-      values.headers = values.headers.filter(
-        header => header.key !== 'Authorizarion' && !header.value.startsWith('Basic'),
-      )
-    }
     const webhook = mapFormValuesToWebhook(values, appId)
     await this.setState({ error: '' })
 
@@ -315,19 +390,14 @@ export default class WebhookForm extends Component {
 
   @bind
   handleRequestAuthenticationChange(event) {
-    const { initialWebhookValue } = this.props
-    this.setState({ mayShowCredentialsInput: event.target.checked })
-
-    if (event.target.checked) {
-      this.setState({ hasAuthorization: Boolean(initialWebhookValue.headers.Authorization) })
-    }
+    this.setState({ shouldShowCredentialsInput: event.target.checked })
   }
 
   @bind
-  handleHeadersChange(event) {
-    // Check if the headers have repeated keys.
-    const headerKeys = event.map(header => header.key)
-    this.setState({ hasAuthorization: event.length !== new Set(headerKeys).size })
+  hasAuthorizationBasic(header) {
+    if (header?.key === 'Authorization' && header.value.startsWith('Basic')) {
+      return true
+    }
   }
 
   render() {
@@ -410,30 +480,33 @@ export default class WebhookForm extends Component {
             sensitive
             code
           />
-          {this.state.hasAuthorization && (
-            <Notification content={m.hasAuthorization} small warning />
-          )}
           <Form.Field
             autoFocus
             title={m.requestBasicAuth}
-            name="basic_auth.value"
+            name="headers"
             label={m.basicAuthCheckbox}
             onChange={this.handleRequestAuthenticationChange}
+            decode={mapBasicAuthHeaderToBoolean}
+            encode={mapBooleanToBasicAuthHeader}
             component={Checkbox}
             tooltipId={tooltipIds.BASIC_AUTH}
           />
-          {this.state.mayShowCredentialsInput && (
+          {this.state.shouldShowCredentialsInput && (
             <Form.FieldContainer horizontal>
               <Form.Field
                 required
                 title={sharedMessages.username}
-                name="basic_auth.username"
+                name="headers"
+                decode={mapBasicAuthHeaderToUsername}
+                encode={makeBasicAuthDecoder(true)}
                 component={Input}
               />
               <Form.Field
                 required
                 title={sharedMessages.password}
-                name="basic_auth.password"
+                name="headers"
+                decode={mapBasicAuthHeaderToPassword}
+                encode={makeBasicAuthDecoder(false)}
                 component={Input}
                 sensitive
               />
@@ -445,8 +518,8 @@ export default class WebhookForm extends Component {
             keyPlaceholder={m.headersKeyPlaceholder}
             valuePlaceholder={m.headersValuePlaceholder}
             addMessage={m.headersAdd}
-            onChange={this.handleHeadersChange}
             component={KeyValueMap}
+            isReadOnly={this.hasAuthorizationBasic}
           />
           <Form.SubTitle title={m.enabledMessages} />
           <Notification info content={m.messageInfo} small />

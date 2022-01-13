@@ -35,6 +35,7 @@ class KeyValueMap extends React.PureComponent {
     className: PropTypes.string,
     disabled: PropTypes.bool,
     indexAsKey: PropTypes.bool,
+    isReadOnly: PropTypes.func,
     keyPlaceholder: PropTypes.message,
     name: PropTypes.string.isRequired,
     onBlur: PropTypes.func,
@@ -60,6 +61,7 @@ class KeyValueMap extends React.PureComponent {
     indexAsKey: false,
     keyPlaceholder: '',
     disabled: false,
+    isReadOnly: false,
   }
 
   @bind
@@ -79,7 +81,6 @@ class KeyValueMap extends React.PureComponent {
   @bind
   removeEntry(index) {
     const { onChange, value } = this.props
-
     onChange(value.filter((_, i) => i !== index) || [], true)
   }
 
@@ -102,32 +103,28 @@ class KeyValueMap extends React.PureComponent {
       onBlur,
       indexAsKey,
       disabled,
+      isReadOnly,
     } = this.props
 
     return (
       <div data-test-id={'key-value-map'} className={classnames(className, style.container)}>
         <div>
           {value &&
-            value.map((value, index) => {
-              if (!(value.key === 'Authorization' && value.value?.startsWith('Basic'))) {
-                return (
-                  <Entry
-                    key={`${name}[${index}]`}
-                    name={name}
-                    value={value}
-                    keyPlaceholder={keyPlaceholder}
-                    valuePlaceholder={valuePlaceholder}
-                    index={index}
-                    onRemoveButtonClick={this.removeEntry}
-                    onChange={this.handleEntryChange}
-                    onBlur={onBlur}
-                    indexAsKey={indexAsKey}
-                  />
-                )
-              }
-
-              return <></>
-            })}
+            value.map((value, index) => (
+              <Entry
+                key={`${name}[${index}]`}
+                name={name}
+                value={value}
+                keyPlaceholder={keyPlaceholder}
+                valuePlaceholder={valuePlaceholder}
+                index={index}
+                onRemoveButtonClick={this.removeEntry}
+                onChange={this.handleEntryChange}
+                onBlur={onBlur}
+                indexAsKey={indexAsKey}
+                readOnly={isReadOnly(value)}
+              />
+            ))}
         </div>
         <div>
           <Button
