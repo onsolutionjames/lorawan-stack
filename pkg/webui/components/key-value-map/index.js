@@ -35,7 +35,7 @@ class KeyValueMap extends React.PureComponent {
     className: PropTypes.string,
     disabled: PropTypes.bool,
     indexAsKey: PropTypes.bool,
-    isReadOnly: PropTypes.func,
+    isReadOnly: PropTypes.bool,
     keyPlaceholder: PropTypes.message,
     name: PropTypes.string.isRequired,
     onBlur: PropTypes.func,
