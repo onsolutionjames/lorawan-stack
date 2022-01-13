@@ -332,7 +332,6 @@
   "console.components.webhook-form.index.messagePathValidateTooLong": "Enabled message path must be at most 64 characters",
   "console.components.webhook-form.index.basicAuthCheckbox": "Use basic access authentication (basic auth)",
   "console.components.webhook-form.index.requestBasicAuth": "Request authentication",
-  "console.components.webhook-form.index.hasAuthorization": "This webhook already has a header with the same key. Adding another will overwrite the one that is already there",
   "console.components.webhook-template-form.index.createTemplate": "Create {template} webhook",
   "console.components.webhook-template-form.index.idPlaceholder": "my-new-{templateId}-webhook",
   "console.components.webhook-template-form.index.templateSettings": "Template settings",
