@@ -109,7 +109,7 @@ require (
 	go.packetbroker.org/api/mapping/v2 v2.1.14-tts
 	go.packetbroker.org/api/routing v1.8.7-tts
 	go.packetbroker.org/api/v3 v3.10.7-tts
-	go.thethings.network/lorawan-application-payload v0.0.0-20211109090704-a9a0a6022856
+	go.thethings.network/lorawan-application-payload v0.0.0-20220114180946-0ee117226458
 	go.thethings.network/lorawan-stack-legacy/v2 v2.0.2
 	go.uber.org/zap v1.19.1
 	// NOTE: gocloud.dev is actually a different version (see above).
@@ -165,7 +165,7 @@ require (
 	github.com/golang-jwt/jwt/v4 v4.2.0 // indirect
 	github.com/golang/groupcache v0.0.0-20210331224755-41bb18bfe9da // indirect
 	github.com/golang/snappy v0.0.4 // indirect
-	github.com/google/uuid v1.3.0 // indirect
+	github.com/google/uuid v1.3.0
 	github.com/google/wire v0.5.0 // indirect
 	github.com/googleapis/gax-go v2.0.2+incompatible // indirect
 	github.com/googleapis/gax-go/v2 v2.1.1 // indirect
