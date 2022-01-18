@@ -346,12 +346,11 @@ func (js *JoinServer) HandleJoin(ctx context.Context, req *ttnpb.JoinRequest, au
 						break
 					}
 				}
+
 				if !isReuse {
+					dev.UsedDevNonces = append(dev.UsedDevNonces, dn)
 					if len(dev.UsedDevNonces) > js.devNonceLimit {
-						copy(dev.UsedDevNonces[:], dev.UsedDevNonces[1:])
-						dev.UsedDevNonces[js.devNonceLimit-1] = dn
-					} else {
-						dev.UsedDevNonces = append(dev.UsedDevNonces, dn)
+						dev.UsedDevNonces = dev.UsedDevNonces[1:]
 					}
 					paths = append(paths, "used_dev_nonces")
 				} else if !dev.ResetsJoinNonces {
