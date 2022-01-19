@@ -44,17 +44,10 @@ func UnaryClientInterceptor(opts ...Option) grpc.UnaryClientInterceptor {
 		var md metadata.MD
 		var err error
 		err = invoker(ctx, method, req, reply, cc, append(opts, grpc.Header(&md))...)
-		var available, reset, retry int
-		available, _ = strconv.Atoi(md.Get(headerXRateAvailable)[0])
-		reset, _ = strconv.Atoi(md.Get(headerXRateReset)[0])
-		retry, _ = strconv.Atoi(md.Get(headerXRateRetry)[0])
-		log.FromContext(ctx).Debugf("Available: %d, Reset: %d, Retry: %d", available, reset, retry)
-
 		if err == nil || !isRetriable(err, callOpts) {
 			return err
 		}
 
-		// retries after the initial request
 		for attempt := uint(1); attempt <= callOpts.max; attempt++ {
 			retryTimeout := callOpts.timeout
 			if callOpts.enableXrateHeader {
