@@ -11,6 +11,8 @@ For details about compatibility between different releases, see the **Commitment
 
 ### Added
 
+- Boilerplate for the Device Claiming Server component.
+
 ### Changed
 
 - Webhook maximum header value length extended to 4096 characters.
