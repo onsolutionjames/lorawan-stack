@@ -193,5 +193,35 @@ func Test_UnaryClientInterceptor(t *testing.T) {
 }
 
 func Test_StreamClientInterceptor(t *testing.T) {
+	// test case - clientStreams not available
+	{
+		lis, err := net.Listen("tcp", "127.0.0.1:0")
+		if err != nil {
+			t.Fatal(err)
+		}
+
+		server := grpc.NewServer()
+		testService := &testService{}
+		rpctest.RegisterFooBarServer(server, testService)
+		go server.Serve(lis)
+
+		cc, err := grpc.DialContext(
+			test.Context(), lis.Addr().String(), grpc.WithInsecure(),
+			grpc.WithStreamInterceptor(rpcretry.StreamClientInterceptor(
+				rpcretry.WithMax(1),
+				rpcretry.WithDefaultTimeout(100*time.Millisecond),
+			)),
+		)
+		if err != nil {
+			t.Fail()
+		}
+		defer cc.Close()
+
+		a := assertions.New(t)
+		client := rpctest.NewFooBarClient(cc)
+		_, err = client.ClientStream(context.Background())
+		a.So(errors.IsUnavailable(err), should.BeTrue)
+
+	}
 
 }

@@ -107,7 +107,7 @@ func (s *retriableStreamer) receiveMsgAndIndicateRetry(m interface{}) (bool, err
 
 func (s *retriableStreamer) reestablishStreamAndResendBuffer(ctx context.Context) (grpc.ClientStream, error) {
 	s.mu.Lock()
-	bufferedSends = s.bufferedSends
+	bufferedSends := s.bufferedSends
 	s.mu.Unlock()
 	newStream, err := s.streamerCall(ctx)
 	if err != nil {
