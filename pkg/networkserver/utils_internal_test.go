@@ -96,7 +96,7 @@ func TestNextDataDownlinkSlot(t *testing.T) {
 					CurrentParameters: ttnpb.MACParameters{
 						Rx1Delay: rxDelay,
 					},
-					LorawanVersion:     ttnpb.MAC_V1_0_3,
+					LorawanVersion:     ttnpb.MACVersion_MAC_V1_0_3,
 					DeviceClass:        ttnpb.Class_CLASS_A,
 					RxWindowsAvailable: true,
 					RecentUplinks:      ups,
@@ -119,7 +119,7 @@ func TestNextDataDownlinkSlot(t *testing.T) {
 					DesiredParameters: ttnpb.MACParameters{
 						Rx1Delay: rxDelay,
 					},
-					LorawanVersion:     ttnpb.MAC_V1_0_3,
+					LorawanVersion:     ttnpb.MACVersion_MAC_V1_0_3,
 					DeviceClass:        ttnpb.Class_CLASS_A,
 					RxWindowsAvailable: true,
 					RecentUplinks:      ups,
@@ -145,7 +145,7 @@ func TestNextDataDownlinkSlot(t *testing.T) {
 					DesiredParameters: ttnpb.MACParameters{
 						Rx1Delay: rxDelay,
 					},
-					LorawanVersion:     ttnpb.MAC_V1_0_3,
+					LorawanVersion:     ttnpb.MACVersion_MAC_V1_0_3,
 					DeviceClass:        ttnpb.Class_CLASS_A,
 					RxWindowsAvailable: true,
 					RecentUplinks:      ups,
@@ -172,7 +172,7 @@ func TestNextDataDownlinkSlot(t *testing.T) {
 					CurrentParameters: ttnpb.MACParameters{
 						Rx1Delay: rxDelay,
 					},
-					LorawanVersion:     ttnpb.MAC_V1_0_3,
+					LorawanVersion:     ttnpb.MACVersion_MAC_V1_0_3,
 					DeviceClass:        ttnpb.Class_CLASS_A,
 					RxWindowsAvailable: true,
 					RecentUplinks:      ups,
@@ -192,7 +192,7 @@ func TestNextDataDownlinkSlot(t *testing.T) {
 					CurrentParameters: ttnpb.MACParameters{
 						Rx1Delay: rxDelay,
 					},
-					LorawanVersion: ttnpb.MAC_V1_0_3,
+					LorawanVersion: ttnpb.MACVersion_MAC_V1_0_3,
 					DeviceClass:    ttnpb.Class_CLASS_A,
 					RecentUplinks:  ups,
 				},
@@ -212,7 +212,7 @@ func TestNextDataDownlinkSlot(t *testing.T) {
 					PingSlotPeriodicity: &ttnpb.PingSlotPeriodValue{
 						Value: ttnpb.PingSlotPeriod_PING_EVERY_2S,
 					},
-					LorawanVersion:     ttnpb.MAC_V1_0_3,
+					LorawanVersion:     ttnpb.MACVersion_MAC_V1_0_3,
 					DeviceClass:        ttnpb.Class_CLASS_B,
 					RxWindowsAvailable: true,
 					RecentUplinks:      ups,
@@ -235,7 +235,7 @@ func TestNextDataDownlinkSlot(t *testing.T) {
 					PingSlotPeriodicity: &ttnpb.PingSlotPeriodValue{
 						Value: ttnpb.PingSlotPeriod_PING_EVERY_2S,
 					},
-					LorawanVersion: ttnpb.MAC_V1_0_3,
+					LorawanVersion: ttnpb.MACVersion_MAC_V1_0_3,
 					DeviceClass:    ttnpb.Class_CLASS_B,
 					RecentUplinks:  ups,
 				},
@@ -253,7 +253,7 @@ func TestNextDataDownlinkSlot(t *testing.T) {
 					PingSlotPeriodicity: &ttnpb.PingSlotPeriodValue{
 						Value: ttnpb.PingSlotPeriod_PING_EVERY_2S,
 					},
-					LorawanVersion: ttnpb.MAC_V1_0_3,
+					LorawanVersion: ttnpb.MACVersion_MAC_V1_0_3,
 					DeviceClass:    ttnpb.Class_CLASS_B,
 					RecentUplinks:  ups,
 				},
@@ -283,7 +283,7 @@ func TestNextDataDownlinkSlot(t *testing.T) {
 					CurrentParameters: ttnpb.MACParameters{
 						Rx1Delay: rxDelay,
 					},
-					LorawanVersion:     ttnpb.MAC_V1_0_3,
+					LorawanVersion:     ttnpb.MACVersion_MAC_V1_0_3,
 					DeviceClass:        ttnpb.Class_CLASS_C,
 					RxWindowsAvailable: true,
 					RecentUplinks:      ups,
@@ -303,7 +303,7 @@ func TestNextDataDownlinkSlot(t *testing.T) {
 					CurrentParameters: ttnpb.MACParameters{
 						Rx1Delay: rxDelay,
 					},
-					LorawanVersion: ttnpb.MAC_V1_0_3,
+					LorawanVersion: ttnpb.MACVersion_MAC_V1_0_3,
 					DeviceClass:    ttnpb.Class_CLASS_C,
 					RecentUplinks:  ups,
 				},
@@ -320,7 +320,7 @@ func TestNextDataDownlinkSlot(t *testing.T) {
 					CurrentParameters: ttnpb.MACParameters{
 						Rx1Delay: rxDelay,
 					},
-					LorawanVersion: ttnpb.MAC_V1_0_3,
+					LorawanVersion: ttnpb.MACVersion_MAC_V1_0_3,
 					DeviceClass:    ttnpb.Class_CLASS_C,
 					RecentUplinks:  ups,
 				},
@@ -345,7 +345,7 @@ func TestNextDataDownlinkSlot(t *testing.T) {
 					CurrentParameters: ttnpb.MACParameters{
 						Rx1Delay: rxDelay,
 					},
-					LorawanVersion: ttnpb.MAC_V1_0_3,
+					LorawanVersion: ttnpb.MACVersion_MAC_V1_0_3,
 					DeviceClass:    ttnpb.Class_CLASS_C,
 				},
 				Session: &ttnpb.Session{
@@ -361,7 +361,7 @@ func TestNextDataDownlinkSlot(t *testing.T) {
 					CurrentParameters: ttnpb.MACParameters{
 						Rx1Delay: rxDelay,
 					},
-					LorawanVersion: ttnpb.MAC_V1_0_3,
+					LorawanVersion: ttnpb.MACVersion_MAC_V1_0_3,
 					DeviceClass:    ttnpb.Class_CLASS_C,
 				},
 				Session: &ttnpb.Session{
@@ -395,7 +395,7 @@ func TestNextDataDownlinkSlot(t *testing.T) {
 						Rx1Delay: rxDelay,
 					},
 					DeviceClass:    ttnpb.Class_CLASS_C,
-					LorawanVersion: ttnpb.MAC_V1_0_3,
+					LorawanVersion: ttnpb.MACVersion_MAC_V1_0_3,
 				},
 				Session: &ttnpb.Session{
 					DevAddr: test.DefaultDevAddr,
@@ -430,7 +430,7 @@ func TestNextDataDownlinkSlot(t *testing.T) {
 					CurrentParameters: ttnpb.MACParameters{
 						Rx1Delay: rxDelay,
 					},
-					LorawanVersion: ttnpb.MAC_V1_0_3,
+					LorawanVersion: ttnpb.MACVersion_MAC_V1_0_3,
 					DeviceClass:    ttnpb.Class_CLASS_C,
 				},
 				Session: &ttnpb.Session{
@@ -461,7 +461,7 @@ func TestNextDataDownlinkSlot(t *testing.T) {
 						Rx1Delay: rxDelay,
 					},
 					DeviceClass:    ttnpb.Class_CLASS_C,
-					LorawanVersion: ttnpb.MAC_V1_0_3,
+					LorawanVersion: ttnpb.MACVersion_MAC_V1_0_3,
 				},
 				Session: &ttnpb.Session{
 					DevAddr: test.DefaultDevAddr,
@@ -485,7 +485,7 @@ func TestNextDataDownlinkSlot(t *testing.T) {
 						Rx1Delay: rxDelay,
 					},
 					DeviceClass:    ttnpb.Class_CLASS_C,
-					LorawanVersion: ttnpb.MAC_V1_0_3,
+					LorawanVersion: ttnpb.MACVersion_MAC_V1_0_3,
 				},
 				Session: &ttnpb.Session{
 					DevAddr: test.DefaultDevAddr,
@@ -508,7 +508,7 @@ func TestNextDataDownlinkSlot(t *testing.T) {
 						Rx1Delay: rxDelay,
 					},
 					DeviceClass:    ttnpb.Class_CLASS_C,
-					LorawanVersion: ttnpb.MAC_V1_0_3,
+					LorawanVersion: ttnpb.MACVersion_MAC_V1_0_3,
 				},
 				Session: &ttnpb.Session{
 					DevAddr: test.DefaultDevAddr,

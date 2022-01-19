@@ -214,7 +214,7 @@ func TestDownlinkQueueReplace(t *testing.T) {
 					},
 					MacState: &ttnpb.MACState{
 						DeviceClass:    ttnpb.Class_CLASS_A,
-						LorawanVersion: ttnpb.MAC_V1_1,
+						LorawanVersion: ttnpb.MACVersion_MAC_V1_1,
 						RecentUplinks:  ups,
 					},
 					Session: &ttnpb.Session{
@@ -293,7 +293,7 @@ func TestDownlinkQueueReplace(t *testing.T) {
 					},
 					MacState: &ttnpb.MACState{
 						DeviceClass:    ttnpb.Class_CLASS_A,
-						LorawanVersion: ttnpb.MAC_V1_1,
+						LorawanVersion: ttnpb.MACVersion_MAC_V1_1,
 						RecentUplinks:  ups,
 					},
 					Session: &ttnpb.Session{
@@ -309,7 +309,7 @@ func TestDownlinkQueueReplace(t *testing.T) {
 					},
 					PendingMacState: &ttnpb.MACState{
 						DeviceClass:    ttnpb.Class_CLASS_A,
-						LorawanVersion: ttnpb.MAC_V1_1,
+						LorawanVersion: ttnpb.MACVersion_MAC_V1_1,
 					},
 					PendingSession: &ttnpb.Session{
 						Keys: &ttnpb.SessionKeys{
@@ -396,7 +396,7 @@ func TestDownlinkQueueReplace(t *testing.T) {
 					},
 					MacState: &ttnpb.MACState{
 						DeviceClass:    ttnpb.Class_CLASS_C,
-						LorawanVersion: ttnpb.MAC_V1_1,
+						LorawanVersion: ttnpb.MACVersion_MAC_V1_1,
 						RecentUplinks:  ups,
 					},
 					Session: &ttnpb.Session{
@@ -545,7 +545,7 @@ func TestDownlinkQueueReplace(t *testing.T) {
 					},
 					MacState: &ttnpb.MACState{
 						DeviceClass:    ttnpb.Class_CLASS_A,
-						LorawanVersion: ttnpb.MAC_V1_1,
+						LorawanVersion: ttnpb.MACVersion_MAC_V1_1,
 						RecentUplinks:  ups,
 					},
 					Session: &ttnpb.Session{
@@ -623,7 +623,7 @@ func TestDownlinkQueueReplace(t *testing.T) {
 					},
 					MacState: &ttnpb.MACState{
 						DeviceClass:    ttnpb.Class_CLASS_C,
-						LorawanVersion: ttnpb.MAC_V1_1,
+						LorawanVersion: ttnpb.MACVersion_MAC_V1_1,
 						RecentUplinks:  ups,
 					},
 					Session: &ttnpb.Session{
@@ -923,7 +923,7 @@ func TestDownlinkQueuePush(t *testing.T) {
 					},
 					MacState: &ttnpb.MACState{
 						DeviceClass:    ttnpb.Class_CLASS_A,
-						LorawanVersion: ttnpb.MAC_V1_1,
+						LorawanVersion: ttnpb.MACVersion_MAC_V1_1,
 						RecentUplinks:  ups,
 					},
 					Session: &ttnpb.Session{
@@ -1002,7 +1002,7 @@ func TestDownlinkQueuePush(t *testing.T) {
 					},
 					MacState: &ttnpb.MACState{
 						DeviceClass:    ttnpb.Class_CLASS_A,
-						LorawanVersion: ttnpb.MAC_V1_1,
+						LorawanVersion: ttnpb.MACVersion_MAC_V1_1,
 						RecentUplinks:  ups,
 					},
 					Session: &ttnpb.Session{
@@ -1018,7 +1018,7 @@ func TestDownlinkQueuePush(t *testing.T) {
 					},
 					PendingMacState: &ttnpb.MACState{
 						DeviceClass:    ttnpb.Class_CLASS_A,
-						LorawanVersion: ttnpb.MAC_V1_1,
+						LorawanVersion: ttnpb.MACVersion_MAC_V1_1,
 					},
 					PendingSession: &ttnpb.Session{
 						Keys: &ttnpb.SessionKeys{
@@ -1089,7 +1089,7 @@ func TestDownlinkQueuePush(t *testing.T) {
 					},
 					MacState: &ttnpb.MACState{
 						DeviceClass:    ttnpb.Class_CLASS_C,
-						LorawanVersion: ttnpb.MAC_V1_1,
+						LorawanVersion: ttnpb.MACVersion_MAC_V1_1,
 						RecentUplinks:  ups,
 					},
 					Session: &ttnpb.Session{
@@ -1159,7 +1159,7 @@ func TestDownlinkQueuePush(t *testing.T) {
 					},
 					MacState: &ttnpb.MACState{
 						DeviceClass:    ttnpb.Class_CLASS_C,
-						LorawanVersion: ttnpb.MAC_V1_0_2,
+						LorawanVersion: ttnpb.MACVersion_MAC_V1_0_2,
 						RecentUplinks:  ups,
 					},
 					Session: &ttnpb.Session{
@@ -1224,7 +1224,7 @@ func TestDownlinkQueuePush(t *testing.T) {
 					},
 					MacState: &ttnpb.MACState{
 						DeviceClass:    ttnpb.Class_CLASS_C,
-						LorawanVersion: ttnpb.MAC_V1_0_2,
+						LorawanVersion: ttnpb.MACVersion_MAC_V1_0_2,
 						RecentUplinks:  ups,
 					},
 				})

@@ -128,9 +128,9 @@ func TestGenerateDataDownlink(t *testing.T) {
 
 		var key types.AES128Key
 		switch ver {
-		case ttnpb.MAC_V1_0, ttnpb.MAC_V1_0_1, ttnpb.MAC_V1_0_2:
+		case ttnpb.MACVersion_MAC_V1_0, ttnpb.MACVersion_MAC_V1_0_1, ttnpb.MACVersion_MAC_V1_0_2:
 			key = fNwkSIntKey
-		case ttnpb.MAC_V1_1:
+		case ttnpb.MACVersion_MAC_V1_1:
 			key = sNwkSIntKey
 		default:
 			panic(fmt.Errorf("unknown version %s", ver))
@@ -161,7 +161,7 @@ func TestGenerateDataDownlink(t *testing.T) {
 					DevAddr:        &devAddr,
 				},
 				MacState: &ttnpb.MACState{
-					LorawanVersion: ttnpb.MAC_V1_1,
+					LorawanVersion: ttnpb.MACVersion_MAC_V1_1,
 					RecentUplinks: []*ttnpb.UplinkMessage{{
 						Payload: &ttnpb.Message{
 							MHdr: &ttnpb.MHDR{
@@ -193,7 +193,7 @@ func TestGenerateDataDownlink(t *testing.T) {
 					StatusCountPeriodicity: &pbtypes.UInt32Value{Value: 3},
 				},
 				MacState: &ttnpb.MACState{
-					LorawanVersion:      ttnpb.MAC_V1_1,
+					LorawanVersion:      ttnpb.MACVersion_MAC_V1_1,
 					LastDevStatusFCntUp: 2,
 					RecentUplinks: []*ttnpb.UplinkMessage{{
 						Payload: &ttnpb.Message{
@@ -229,7 +229,7 @@ func TestGenerateDataDownlink(t *testing.T) {
 					StatusTimePeriodicity: ttnpb.ProtoDurationPtr(24 * time.Hour),
 				},
 				MacState: &ttnpb.MACState{
-					LorawanVersion: ttnpb.MAC_V1_1,
+					LorawanVersion: ttnpb.MACVersion_MAC_V1_1,
 					RecentUplinks: []*ttnpb.UplinkMessage{{
 						Payload: &ttnpb.Message{
 							MHdr: &ttnpb.MHDR{
@@ -259,7 +259,7 @@ func TestGenerateDataDownlink(t *testing.T) {
 					DevAddr:        &devAddr,
 				},
 				MacState: &ttnpb.MACState{
-					LorawanVersion: ttnpb.MAC_V1_1,
+					LorawanVersion: ttnpb.MACVersion_MAC_V1_1,
 					RecentUplinks: []*ttnpb.UplinkMessage{{
 						Payload: &ttnpb.Message{
 							MHdr: &ttnpb.MHDR{
@@ -278,7 +278,7 @@ func TestGenerateDataDownlink(t *testing.T) {
 					RecentDownlinks: []*ttnpb.DownlinkMessage{
 						MakeDataDownlink(DataDownlinkConfig{
 							DecodePayload: true,
-							MACVersion:    ttnpb.MAC_V1_1,
+							MACVersion:    ttnpb.MACVersion_MAC_V1_1,
 						}),
 					},
 					RxWindowsAvailable: true,
@@ -326,7 +326,7 @@ func TestGenerateDataDownlink(t *testing.T) {
 						DevAddr:        &devAddr,
 					},
 					MacState: &ttnpb.MACState{
-						LorawanVersion: ttnpb.MAC_V1_1,
+						LorawanVersion: ttnpb.MACVersion_MAC_V1_1,
 						RecentUplinks: []*ttnpb.UplinkMessage{{
 							Payload: &ttnpb.Message{
 								MHdr: &ttnpb.MHDR{
@@ -345,7 +345,7 @@ func TestGenerateDataDownlink(t *testing.T) {
 						RecentDownlinks: []*ttnpb.DownlinkMessage{
 							MakeDataDownlink(DataDownlinkConfig{
 								DecodePayload: true,
-								MACVersion:    ttnpb.MAC_V1_1,
+								MACVersion:    ttnpb.MACVersion_MAC_V1_1,
 							}),
 						},
 						RxWindowsAvailable: true,
@@ -376,7 +376,7 @@ func TestGenerateDataDownlink(t *testing.T) {
 					DevAddr:        &devAddr,
 				},
 				MacState: &ttnpb.MACState{
-					LorawanVersion: ttnpb.MAC_V1_1,
+					LorawanVersion: ttnpb.MACVersion_MAC_V1_1,
 					RecentUplinks: []*ttnpb.UplinkMessage{{
 						Payload: &ttnpb.Message{
 							MHdr: &ttnpb.MHDR{
@@ -450,7 +450,7 @@ func TestGenerateDataDownlink(t *testing.T) {
 						DevAddr:        &devAddr,
 					},
 					MacState: &ttnpb.MACState{
-						LorawanVersion: ttnpb.MAC_V1_1,
+						LorawanVersion: ttnpb.MACVersion_MAC_V1_1,
 						RecentUplinks: []*ttnpb.UplinkMessage{{
 							Payload: &ttnpb.Message{
 								MHdr: &ttnpb.MHDR{
@@ -491,7 +491,7 @@ func TestGenerateDataDownlink(t *testing.T) {
 					DevAddr:        &devAddr,
 				},
 				MacState: &ttnpb.MACState{
-					LorawanVersion: ttnpb.MAC_V1_1,
+					LorawanVersion: ttnpb.MACVersion_MAC_V1_1,
 					RecentUplinks: []*ttnpb.UplinkMessage{{
 						Payload: &ttnpb.Message{
 							MHdr: &ttnpb.MHDR{
@@ -569,7 +569,7 @@ func TestGenerateDataDownlink(t *testing.T) {
 						DevAddr:        &devAddr,
 					},
 					MacState: &ttnpb.MACState{
-						LorawanVersion: ttnpb.MAC_V1_1,
+						LorawanVersion: ttnpb.MACVersion_MAC_V1_1,
 						RecentUplinks: []*ttnpb.UplinkMessage{{
 							Payload: &ttnpb.Message{
 								MHdr: &ttnpb.MHDR{
@@ -613,7 +613,7 @@ func TestGenerateDataDownlink(t *testing.T) {
 					DevAddr:        &devAddr,
 				},
 				MacState: &ttnpb.MACState{
-					LorawanVersion: ttnpb.MAC_V1_1,
+					LorawanVersion: ttnpb.MACVersion_MAC_V1_1,
 					RecentUplinks: []*ttnpb.UplinkMessage{{
 						Payload: &ttnpb.Message{
 							MHdr: &ttnpb.MHDR{
@@ -690,7 +690,7 @@ func TestGenerateDataDownlink(t *testing.T) {
 						DevAddr:        &devAddr,
 					},
 					MacState: &ttnpb.MACState{
-						LorawanVersion: ttnpb.MAC_V1_1,
+						LorawanVersion: ttnpb.MACVersion_MAC_V1_1,
 						RecentUplinks: []*ttnpb.UplinkMessage{{
 							Payload: &ttnpb.Message{
 								MHdr: &ttnpb.MHDR{
@@ -730,7 +730,7 @@ func TestGenerateDataDownlink(t *testing.T) {
 					DevAddr:        &devAddr,
 				},
 				MacState: &ttnpb.MACState{
-					LorawanVersion: ttnpb.MAC_V1_1,
+					LorawanVersion: ttnpb.MACVersion_MAC_V1_1,
 					RecentUplinks: []*ttnpb.UplinkMessage{{
 						Payload: &ttnpb.Message{
 							MHdr: &ttnpb.MHDR{
@@ -812,7 +812,7 @@ func TestGenerateDataDownlink(t *testing.T) {
 						DevAddr:        &devAddr,
 					},
 					MacState: &ttnpb.MACState{
-						LorawanVersion: ttnpb.MAC_V1_1,
+						LorawanVersion: ttnpb.MACVersion_MAC_V1_1,
 						RecentUplinks: []*ttnpb.UplinkMessage{{
 							Payload: &ttnpb.Message{
 								MHdr: &ttnpb.MHDR{
@@ -859,7 +859,7 @@ func TestGenerateDataDownlink(t *testing.T) {
 					StatusCountPeriodicity: &pbtypes.UInt32Value{Value: 3},
 				},
 				MacState: &ttnpb.MACState{
-					LorawanVersion:      ttnpb.MAC_V1_1,
+					LorawanVersion:      ttnpb.MACVersion_MAC_V1_1,
 					LastDevStatusFCntUp: 4,
 					RecentUplinks: []*ttnpb.UplinkMessage{{
 						Payload: &ttnpb.Message{
@@ -876,7 +876,7 @@ func TestGenerateDataDownlink(t *testing.T) {
 					RecentDownlinks: []*ttnpb.DownlinkMessage{
 						MakeDataDownlink(DataDownlinkConfig{
 							DecodePayload: true,
-							MACVersion:    ttnpb.MAC_V1_1,
+							MACVersion:    ttnpb.MACVersion_MAC_V1_1,
 						}),
 					},
 				},
@@ -934,7 +934,7 @@ func TestGenerateDataDownlink(t *testing.T) {
 						StatusCountPeriodicity: &pbtypes.UInt32Value{Value: 3},
 					},
 					MacState: &ttnpb.MACState{
-						LorawanVersion:      ttnpb.MAC_V1_1,
+						LorawanVersion:      ttnpb.MACVersion_MAC_V1_1,
 						LastDevStatusFCntUp: 4,
 						PendingRequests: []*ttnpb.MACCommand{
 							ttnpb.MACCommandIdentifier_CID_DEV_STATUS.MACCommand(),
@@ -954,7 +954,7 @@ func TestGenerateDataDownlink(t *testing.T) {
 						RecentDownlinks: []*ttnpb.DownlinkMessage{
 							MakeDataDownlink(DataDownlinkConfig{
 								DecodePayload: true,
-								MACVersion:    ttnpb.MAC_V1_1,
+								MACVersion:    ttnpb.MACVersion_MAC_V1_1,
 							}),
 						},
 					},
@@ -988,7 +988,7 @@ func TestGenerateDataDownlink(t *testing.T) {
 					StatusTimePeriodicity: ttnpb.ProtoDurationPtr(time.Nanosecond),
 				},
 				MacState: &ttnpb.MACState{
-					LorawanVersion: ttnpb.MAC_V1_1,
+					LorawanVersion: ttnpb.MACVersion_MAC_V1_1,
 					RecentUplinks: []*ttnpb.UplinkMessage{{
 						Payload: &ttnpb.Message{
 							MHdr: &ttnpb.MHDR{
@@ -1004,7 +1004,7 @@ func TestGenerateDataDownlink(t *testing.T) {
 					RecentDownlinks: []*ttnpb.DownlinkMessage{
 						MakeDataDownlink(DataDownlinkConfig{
 							DecodePayload: true,
-							MACVersion:    ttnpb.MAC_V1_1,
+							MACVersion:    ttnpb.MACVersion_MAC_V1_1,
 						}),
 					},
 				},
@@ -1061,7 +1061,7 @@ func TestGenerateDataDownlink(t *testing.T) {
 						StatusTimePeriodicity: ttnpb.ProtoDurationPtr(time.Nanosecond),
 					},
 					MacState: &ttnpb.MACState{
-						LorawanVersion: ttnpb.MAC_V1_1,
+						LorawanVersion: ttnpb.MACVersion_MAC_V1_1,
 						PendingRequests: []*ttnpb.MACCommand{
 							ttnpb.MACCommandIdentifier_CID_DEV_STATUS.MACCommand(),
 						},
@@ -1080,7 +1080,7 @@ func TestGenerateDataDownlink(t *testing.T) {
 						RecentDownlinks: []*ttnpb.DownlinkMessage{
 							MakeDataDownlink(DataDownlinkConfig{
 								DecodePayload: true,
-								MACVersion:    ttnpb.MAC_V1_1,
+								MACVersion:    ttnpb.MACVersion_MAC_V1_1,
 							}),
 						},
 					},
