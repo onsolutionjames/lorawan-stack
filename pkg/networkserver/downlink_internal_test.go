@@ -176,7 +176,7 @@ func TestGenerateDataDownlink(t *testing.T) {
 					}},
 				},
 				Session:           generateSession(),
-				LorawanPhyVersion: ttnpb.RP001_V1_1_REV_B,
+				LorawanPhyVersion: ttnpb.PHYVersion_RP001_V1_1_REV_B,
 				FrequencyPlanId:   band.EU_863_870,
 			},
 			Error: errNoDownlink,
@@ -211,7 +211,7 @@ func TestGenerateDataDownlink(t *testing.T) {
 				Session: &ttnpb.Session{
 					LastFCntUp: 4,
 				},
-				LorawanPhyVersion:       ttnpb.RP001_V1_1_REV_B,
+				LorawanPhyVersion:       ttnpb.PHYVersion_RP001_V1_1_REV_B,
 				FrequencyPlanId:         band.EU_863_870,
 				LastDevStatusReceivedAt: ttnpb.ProtoTimePtr(time.Unix(42, 0)),
 			},
@@ -243,7 +243,7 @@ func TestGenerateDataDownlink(t *testing.T) {
 						},
 					}},
 				},
-				LorawanPhyVersion:       ttnpb.RP001_V1_1_REV_B,
+				LorawanPhyVersion:       ttnpb.PHYVersion_RP001_V1_1_REV_B,
 				FrequencyPlanId:         band.EU_863_870,
 				LastDevStatusReceivedAt: ttnpb.ProtoTimePtr(time.Now()),
 				Session:                 generateSession(),
@@ -295,7 +295,7 @@ func TestGenerateDataDownlink(t *testing.T) {
 						},
 					},
 				},
-				LorawanPhyVersion: ttnpb.RP001_V1_1_REV_B,
+				LorawanPhyVersion: ttnpb.PHYVersion_RP001_V1_1_REV_B,
 				FrequencyPlanId:   band.EU_863_870,
 			},
 			Payload: &ttnpb.Message{
@@ -362,7 +362,7 @@ func TestGenerateDataDownlink(t *testing.T) {
 							},
 						},
 					},
-					LorawanPhyVersion: ttnpb.RP001_V1_1_REV_B,
+					LorawanPhyVersion: ttnpb.PHYVersion_RP001_V1_1_REV_B,
 					FrequencyPlanId:   band.EU_863_870,
 				})
 			},
@@ -410,7 +410,7 @@ func TestGenerateDataDownlink(t *testing.T) {
 						},
 					},
 				},
-				LorawanPhyVersion: ttnpb.RP001_V1_1_REV_B,
+				LorawanPhyVersion: ttnpb.PHYVersion_RP001_V1_1_REV_B,
 				FrequencyPlanId:   band.EU_863_870,
 			},
 			Payload: &ttnpb.Message{
@@ -477,7 +477,7 @@ func TestGenerateDataDownlink(t *testing.T) {
 						},
 						QueuedApplicationDownlinks: []*ttnpb.ApplicationDownlink{},
 					},
-					LorawanPhyVersion: ttnpb.RP001_V1_1_REV_B,
+					LorawanPhyVersion: ttnpb.PHYVersion_RP001_V1_1_REV_B,
 					FrequencyPlanId:   band.EU_863_870,
 				})
 			},
@@ -528,7 +528,7 @@ func TestGenerateDataDownlink(t *testing.T) {
 						},
 					},
 				},
-				LorawanPhyVersion: ttnpb.RP001_V1_1_REV_B,
+				LorawanPhyVersion: ttnpb.PHYVersion_RP001_V1_1_REV_B,
 				FrequencyPlanId:   band.EU_863_870,
 			},
 			Payload: &ttnpb.Message{
@@ -599,7 +599,7 @@ func TestGenerateDataDownlink(t *testing.T) {
 						},
 						QueuedApplicationDownlinks: []*ttnpb.ApplicationDownlink{},
 					},
-					LorawanPhyVersion: ttnpb.RP001_V1_1_REV_B,
+					LorawanPhyVersion: ttnpb.PHYVersion_RP001_V1_1_REV_B,
 					FrequencyPlanId:   band.EU_863_870,
 				})
 			},
@@ -646,7 +646,7 @@ func TestGenerateDataDownlink(t *testing.T) {
 						},
 					},
 				},
-				LorawanPhyVersion: ttnpb.RP001_V1_1_REV_B,
+				LorawanPhyVersion: ttnpb.PHYVersion_RP001_V1_1_REV_B,
 				FrequencyPlanId:   band.EU_863_870,
 			},
 			Payload: &ttnpb.Message{
@@ -716,7 +716,7 @@ func TestGenerateDataDownlink(t *testing.T) {
 						},
 						QueuedApplicationDownlinks: []*ttnpb.ApplicationDownlink{},
 					},
-					LorawanPhyVersion: ttnpb.RP001_V1_1_REV_B,
+					LorawanPhyVersion: ttnpb.PHYVersion_RP001_V1_1_REV_B,
 					FrequencyPlanId:   band.EU_863_870,
 				})
 			},
@@ -767,7 +767,7 @@ func TestGenerateDataDownlink(t *testing.T) {
 						},
 					},
 				},
-				LorawanPhyVersion: ttnpb.RP001_V1_1_REV_B,
+				LorawanPhyVersion: ttnpb.PHYVersion_RP001_V1_1_REV_B,
 				FrequencyPlanId:   band.EU_863_870,
 			},
 			Payload: &ttnpb.Message{
@@ -842,7 +842,7 @@ func TestGenerateDataDownlink(t *testing.T) {
 						},
 						QueuedApplicationDownlinks: []*ttnpb.ApplicationDownlink{},
 					},
-					LorawanPhyVersion: ttnpb.RP001_V1_1_REV_B,
+					LorawanPhyVersion: ttnpb.PHYVersion_RP001_V1_1_REV_B,
 					FrequencyPlanId:   band.EU_863_870,
 				})
 			},
@@ -893,7 +893,7 @@ func TestGenerateDataDownlink(t *testing.T) {
 						},
 					},
 				},
-				LorawanPhyVersion: ttnpb.RP001_V1_1_REV_B,
+				LorawanPhyVersion: ttnpb.PHYVersion_RP001_V1_1_REV_B,
 				FrequencyPlanId:   band.EU_863_870,
 			},
 			Payload: &ttnpb.Message{
@@ -911,7 +911,7 @@ func TestGenerateDataDownlink(t *testing.T) {
 							},
 							FCnt: 42,
 							FOpts: MustEncryptDownlink(nwkSEncKey, devAddr, 42, true, MakeDownlinkMACBuffer(
-								LoRaWANBands[band.EU_863_870][ttnpb.RP001_V1_1_REV_B],
+								LoRaWANBands[band.EU_863_870][ttnpb.PHYVersion_RP001_V1_1_REV_B],
 								ttnpb.MACCommandIdentifier_CID_DEV_STATUS,
 							)...),
 						},
@@ -971,7 +971,7 @@ func TestGenerateDataDownlink(t *testing.T) {
 							},
 						},
 					},
-					LorawanPhyVersion: ttnpb.RP001_V1_1_REV_B,
+					LorawanPhyVersion: ttnpb.PHYVersion_RP001_V1_1_REV_B,
 					FrequencyPlanId:   band.EU_863_870,
 				})
 			},
@@ -1020,7 +1020,7 @@ func TestGenerateDataDownlink(t *testing.T) {
 						},
 					},
 				},
-				LorawanPhyVersion: ttnpb.RP001_V1_1_REV_B,
+				LorawanPhyVersion: ttnpb.PHYVersion_RP001_V1_1_REV_B,
 				FrequencyPlanId:   band.EU_863_870,
 			},
 			Payload: &ttnpb.Message{
@@ -1038,7 +1038,7 @@ func TestGenerateDataDownlink(t *testing.T) {
 							},
 							FCnt: 42,
 							FOpts: MustEncryptDownlink(nwkSEncKey, devAddr, 42, true, MakeDownlinkMACBuffer(
-								LoRaWANBands[band.EU_863_870][ttnpb.RP001_V1_1_REV_B],
+								LoRaWANBands[band.EU_863_870][ttnpb.PHYVersion_RP001_V1_1_REV_B],
 								ttnpb.MACCommandIdentifier_CID_DEV_STATUS,
 							)...),
 						},
@@ -1096,7 +1096,7 @@ func TestGenerateDataDownlink(t *testing.T) {
 							},
 						},
 					},
-					LorawanPhyVersion: ttnpb.RP001_V1_1_REV_B,
+					LorawanPhyVersion: ttnpb.PHYVersion_RP001_V1_1_REV_B,
 					FrequencyPlanId:   band.EU_863_870,
 				})
 			},
