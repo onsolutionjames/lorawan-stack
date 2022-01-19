@@ -183,7 +183,9 @@ func preRun(tasks ...func() error) func(cmd *cobra.Command, args []string) error
 		}
 
 		api.SetRetryMax(config.Retry.Max)
-		api.SetRetryTimeout(config.Retry.Timeout)
+		api.SetRetryDefaultTimeout(config.Retry.DefaultTimeout)
+		api.SetRetryEnableMetadata(config.Retry.EnableMetatada)
+		api.SetRetryJitter(config.Retry.Jitter)
 
 		if config.CA != "" {
 			pemBytes, err := os.ReadFile(config.CA)

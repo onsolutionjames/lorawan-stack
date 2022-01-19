@@ -43,6 +43,7 @@ var (
 		timeout:           100 * time.Millisecond,
 		validators:        DefaultValidators,
 		enableXrateHeader: true,
+		jitter:            0.0,
 	}
 )
 
