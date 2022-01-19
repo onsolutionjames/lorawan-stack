@@ -31,6 +31,11 @@ import (
 	"google.golang.org/grpc/metadata"
 )
 
+var (
+	exaushtedErr = errors.DefineResourceExhausted("rpcretry_unary_resource_exausted", "mock error of a resource exaushted scenario")
+	internalErr  = errors.DefineInternal("rpcretry_unary_internal", "mock error that represents an error that should not be retried")
+)
+
 type testService struct {
 	rpctest.FooBarServer
 	md metadata.MD
@@ -57,9 +62,6 @@ func (fs *testService) Unary(ctx context.Context, foo *rpctest.Foo) (*rpctest.Ba
 }
 
 func Test_UnaryClientInterceptor(t *testing.T) {
-	exaushtedErr := errors.DefineResourceExhausted("rpcretry_unary_resource_exausted", "mock error of a resource exaushted scenario")
-	internalErr := errors.DefineInternal("rpcretry_unary_internal", "mock error that represents an error that should not be retried")
-
 	type Service struct {
 		unaryErr      error
 		sleep         time.Duration
@@ -188,4 +190,8 @@ func Test_UnaryClientInterceptor(t *testing.T) {
 			a.So(testService.reqCounter, should.Equal, tt.expectedReqAmount)
 		})
 	}
+}
+
+func Test_StreamClientInterceptor(t *testing.T) {
+
 }

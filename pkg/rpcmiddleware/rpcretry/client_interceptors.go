@@ -20,10 +20,13 @@ import (
 	"time"
 
 	"github.com/grpc-ecosystem/go-grpc-middleware/util/backoffutils"
+	"go.thethings.network/lorawan-stack/v3/pkg/errors"
 	"go.thethings.network/lorawan-stack/v3/pkg/log"
 	"google.golang.org/grpc"
 	"google.golang.org/grpc/metadata"
 )
+
+type AttemptMetadataKey struct{}
 
 const (
 	headerXRateLimit     = "x-rate-limit-limit"
@@ -32,7 +35,7 @@ const (
 	headerXRateRetry     = "x-rate-limit-retry"
 )
 
-type AttemptMetadataKey struct{}
+var errInvalidStreamType = errors.DefineUnavailable("unsupported_stream_type_grpcretry", "Client streams are not supported in the grpc retry interceptor")
 
 // UnaryClientInterceptor returns a new unary client interceptor that retries the execution of external gRPC calls, the
 // retry attempt will only occur if any of the validators define the error as a trigger.
@@ -76,6 +79,65 @@ func UnaryClientInterceptor(opts ...Option) grpc.UnaryClientInterceptor {
 		}
 
 		return err
+	}
+}
+
+// StreamClientInterceptor returns a new streaming client interceptor that retries the execution of external gRPC
+// calls, the retry attempt will only occur if any of the validators define the error as a trigger.
+func StreamClientInterceptor(opts ...Option) grpc.StreamClientInterceptor {
+	callOpts := evaluateClientOpt(opts...)
+	return func(ctx context.Context, desc *grpc.StreamDesc, cc *grpc.ClientConn, method string, streamer grpc.Streamer, opts ...grpc.CallOption) (grpc.ClientStream, error) {
+		if callOpts.max == 0 {
+			return streamer(ctx, desc, cc, method, opts...)
+		}
+
+		if desc.ClientStreams {
+			return nil, errInvalidStreamType.New()
+		}
+
+		logger := log.FromContext(ctx)
+		var md metadata.MD
+		var err error
+
+		for attempt := uint(0); attempt <= callOpts.max; attempt++ {
+			retryTimeout := callOpts.timeout
+			if callOpts.enableXrateHeader {
+				if headerTimeout := getHeaderLimiterTimeout(ctx, md, callOpts); headerTimeout > 0 {
+					retryTimeout = headerTimeout
+				}
+			}
+
+			// TODO: incorporate the attemp == 0 skip within the waitRetryBackoff
+			if attempt > 0 {
+				logger.WithField("attempt", attempt).Infof("Failed request, waiting %v until next attempt", retryTimeout)
+				err = waitRetryBackoff(ctx, retryTimeout)
+				if err != nil {
+					logger.WithError(err).Debug("An unexpected error occurred while in the timeout for the next request retry")
+					return nil, err
+				}
+			}
+
+			var clientStream grpc.ClientStream
+			callCtx := context.WithValue(ctx, AttemptMetadataKey{}, attempt)
+			clientStream, err = streamer(callCtx, desc, cc, method, append(opts, grpc.Header(&md))...)
+			if err == nil {
+				retriableStream := &retriableStreamer{
+					ClientStream: clientStream,
+					callOpts:     callOpts,
+					parentCtx:    ctx,
+					streamerCall: func(ctx context.Context) (grpc.ClientStream, error) {
+						return streamer(ctx, desc, cc, method, opts...)
+					},
+				}
+				return retriableStream, nil
+			}
+			logger.WithField("attempt", attempt).WithError(err).Debug("Failed request")
+
+			if !isRetriable(err, callOpts) {
+				return clientStream, err
+			}
+		}
+		return nil, err
 	}
 }
 
